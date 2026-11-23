@@ -40,6 +40,7 @@ var CommonCustomFuncs = map[string]CustomFuncType{
 	"now":                     Now,
 	"upper":                   Upper,
 	"uuidv3":                  UUIDv3,
+	"versionedLookup":         VersionedLookup,
 }
 
 // Coalesce returns the first non-empty string of the input strings. If no input strings are given or

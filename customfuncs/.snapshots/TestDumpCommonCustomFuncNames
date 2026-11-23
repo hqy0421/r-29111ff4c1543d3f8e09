@@ -8,5 +8,6 @@
 	"lower",
 	"now",
 	"upper",
-	"uuidv3"
+	"uuidv3",
+	"versionedLookup"
 ]

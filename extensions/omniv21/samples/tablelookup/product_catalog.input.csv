@@ -1,0 +1,8 @@
+SUPPLIER|SKU|PRODUCT_NAME
+SUP_A|SKU-100|Hammer
+SUP_A|SKU-200|Generic Gadget
+SUP_B|SKU-100|Camping Tent
+SUP_B|SKU-999|New Widget
+SUP_B|SKU-999|New Widget Pro
+SUP_C|SKU-100|SUP_C Hammer
+||Orphan Row

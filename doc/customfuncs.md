@@ -10,6 +10,7 @@
     * [now](#now)
     * [upper](#upper)
     * [uuidv3](#uuidv3)
+    * [versionedLookup](#versionedlookup)
   * [omni\.2\.1 Schema Handler Specific custom\_func](#omni21-schema-handler-specific-custom_func)
     * [copy](#copy)
     * [javascript](#javascript)
@@ -255,6 +256,62 @@ If IDR node `../GLOBAL/carrier` value is `"abc"`, then the result field `carrier
 ```
 The result field `unique_customer_order_id` will contain the value of an MD5 hash of the concatenated
 string of customer_id value, `"/"`, and order_id value.
+
+---
+
+> ### versionedLookup
+
+**Synopsis**: `versionedLookup` looks up a composite key in a batch-registered reference table at a
+pinned (fixed) version, and returns the mapped value. Unknown keys are collected into a
+supplementary/backfill result instead of being mixed with known-but-empty mappings.
+
+**Pkg doc**: [here](https://pkg.go.dev/github.com/jf-tech/omniparser/customfuncs#VersionedLookup).
+
+**Example**:
+```
+"std_category": { "custom_func": { "name": "versionedLookup", "args": [
+    { "const": "sku_category" },                        "_comment": "reference table name",
+    { "external": "sku_category_dict_version" },        "_comment": "pinned dictionary version",
+    { "xpath": "SUPPLIER" },                            "_comment": "composite key part 1",
+    { "xpath": "SKU" }                                  "_comment": "composite key part 2"
+]}},
+"std_category_dict_version": { "external": "sku_category_dict_version" },
+```
+Before the transform, the caller registers the batch's reference table(s) and passes the registry
+in via `transformctx.Ctx.CustomParam`:
+```
+registry := customfuncs.NewLookupRegistry()
+registry.Register("sku_category", "2026-Q4", map[string]string{
+    customfuncs.LookupKey("SUP_A", "SKU-100"): "Tools/Hand Tools",
+    customfuncs.LookupKey("SUP_A", "SKU-200"): "", // known empty category
+})
+transform, err := schema.NewTransform(inputName, inputReader, &transformctx.Ctx{
+    ExternalProperties: map[string]string{"sku_category_dict_version": "2026-Q4"},
+    CustomParam:        registry,
+})
+... // read all records
+supplementary, _ := json.Marshal(registry.Misses()) // the backfill result
+```
+
+The key parts are joined with `customfuncs.LookupKey`, so composite keys are unambiguous and
+different suppliers can safely share the same code (`("SUP_A", "SKU-100")` and `("SUP_B",
+"SKU-100")` map independently). The version is pinned: if the table or that exact version isn't
+registered, the transform fails with an error - it never silently falls back to another version.
+Echo the version into the output with the same `external`/const decl (as above) so every output
+record is reproducible.
+
+Outcome handling:
+- key found with a non-empty value: the value is returned.
+- key found with an empty value (a known empty mapping): `""` is returned and nothing is
+  recorded - known empty mappings never mix into the supplementary result.
+- key not found (an unknown code): `""` is returned and the key is recorded in
+  `registry.Misses()`, deduplicated by (table, version, key) with a hit count and stamped with
+  the pinned version.
+- all key parts empty (e.g. the SKU field is absent in the input record): `""` is returned and
+  nothing is looked up or recorded.
+
+See this [sample](../extensions/omniv21/samples/tablelookup/tablelookup_test.go) for a complete
+product-catalog conversion.
 
 ---
 

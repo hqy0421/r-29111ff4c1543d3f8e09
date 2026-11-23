@@ -1,0 +1,36 @@
+{
+    "parser_settings": {
+        "version": "omni.2.1",
+        "file_format_type": "csv"
+    },
+    "file_declaration": {
+        "delimiter": "|",
+        "header_row_index": 1,
+        "data_row_index": 2,
+        "columns": [
+            { "name": "SUPPLIER" },
+            { "name": "SKU" },
+            { "name": "PRODUCT_NAME" }
+        ]
+    },
+    "transform_declarations": {
+        "FINAL_OUTPUT": { "object": {
+            "supplier": { "xpath": "SUPPLIER" },
+            "sku": { "xpath": "SKU" },
+            "product_name": { "xpath": "PRODUCT_NAME" },
+            "std_category": { "custom_func": {
+                "name": "versionedLookup",
+                "args": [
+                    { "const": "sku_category", "_comment": "reference table name" },
+                    { "external": "sku_category_dict_version", "_comment": "pinned dictionary version" },
+                    { "xpath": "SUPPLIER", "_comment": "composite key part 1: supplier" },
+                    { "xpath": "SKU", "_comment": "composite key part 2: original SKU" }
+                ]
+            }},
+            "std_category_dict_version": {
+                "external": "sku_category_dict_version",
+                "_comment": "echo the pinned version so the output is reproducible"
+            }
+        }}
+    }
+}

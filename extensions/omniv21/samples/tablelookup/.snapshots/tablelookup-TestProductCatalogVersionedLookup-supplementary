@@ -1,0 +1,22 @@
+[
+	{
+		"table": "sku_category",
+		"version": "2026-Q4",
+		"key": "SUP_B\u001fSKU-999",
+		"key_parts": [
+			"SUP_B",
+			"SKU-999"
+		],
+		"count": 2
+	},
+	{
+		"table": "sku_category",
+		"version": "2026-Q4",
+		"key": "SUP_C\u001fSKU-100",
+		"key_parts": [
+			"SUP_C",
+			"SKU-100"
+		],
+		"count": 1
+	}
+]

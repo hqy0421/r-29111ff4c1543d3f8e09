@@ -1,0 +1,44 @@
+[
+	{
+		"product_name": "Hammer",
+		"sku": "SKU-100",
+		"std_category": "Tools/Hand Tools",
+		"std_category_dict_version": "2026-Q4",
+		"supplier": "SUP_A"
+	},
+	{
+		"product_name": "Generic Gadget",
+		"sku": "SKU-200",
+		"std_category_dict_version": "2026-Q4",
+		"supplier": "SUP_A"
+	},
+	{
+		"product_name": "Camping Tent",
+		"sku": "SKU-100",
+		"std_category": "Outdoor/Camping",
+		"std_category_dict_version": "2026-Q4",
+		"supplier": "SUP_B"
+	},
+	{
+		"product_name": "New Widget",
+		"sku": "SKU-999",
+		"std_category_dict_version": "2026-Q4",
+		"supplier": "SUP_B"
+	},
+	{
+		"product_name": "New Widget Pro",
+		"sku": "SKU-999",
+		"std_category_dict_version": "2026-Q4",
+		"supplier": "SUP_B"
+	},
+	{
+		"product_name": "SUP_C Hammer",
+		"sku": "SKU-100",
+		"std_category_dict_version": "2026-Q4",
+		"supplier": "SUP_C"
+	},
+	{
+		"product_name": "Orphan Row",
+		"std_category_dict_version": "2026-Q4"
+	}
+]
